@@ -38,7 +38,6 @@ public:
             error("All of the required arguments where not put!");
             return false;
         }
-        std::cout << "Number Of arguments \n";
         for(int i = i; i < numberOfArgs;i++){
             string u_arg = argv[i];
             for (argument arg: arguments){

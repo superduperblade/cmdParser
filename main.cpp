@@ -2,6 +2,9 @@
 #include "cmdParser.h"
 int main(int argc, char* argv[]){
 
+
+    std::cout << __cplusplus ;
+
     cmdParser parser(true);
 
     parser.addOption("-help","provides a help message",true,true);
