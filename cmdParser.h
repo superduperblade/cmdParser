@@ -34,13 +34,23 @@ public:
 
     //You MUST have defined all your options before doing this!
     bool passArguments(int numberOfArgs,char* argv[]){
+
+        
+
         if(getNumberOfRequiredArguments()> numberOfArgs){
             error("All of the required arguments where not put!");
             return false;
         }
-        for(int i = i; i < numberOfArgs;i++){
+
+        
+        //starts at 1 instead of position 0 as the first argument is the executable
+        for(int i = 1; i < numberOfArgs;i++){
             string u_arg = argv[i];
+            bool was_found = false;
+
+
             for (argument arg: arguments){
+                std::cout << arg.identifier << '\n';
                 if(arg.identifier == u_arg ){
                     if (arg.subtype){
                         if( i +1 != numberOfArgs ){
@@ -48,6 +58,7 @@ public:
                            
                         //skips the next provided argument as thats the value the user put
                             i++;
+                            was_found = true;
                         }else {
                             error("No value provided next to argument: "+arg.subtype);
                             return false;
@@ -56,13 +67,15 @@ public:
                         //just puts the identifier itself
                         userArgument_values[arg.identifier] = argv[i];
                     }
-                }else{
-                    error("Invalid arguement provided: "+u_arg +"\n");
-                    return false;
                 }
+
+            }
+
+            if (!was_found) {
+                error("No argument was found for: " + u_arg);
             }
         }
-        return true;
+        return false;
     }
 
     void addOption(string identifier,string helpMessage, bool required,bool subtype){
@@ -103,7 +116,7 @@ public:
     string displayHelpMessage(){
         string helpMessage = "This program uses the following command line arguments: \n";
         for (argument arg : arguments){
-            helpMessage += std::format("Identifier: {} , Help: {}, Required: {} \n",arg.identifier,arg.helpMessage,arg.required);      
+            helpMessage += std::format("Identifier: {} , Required: {}, Help: {} \n",arg.identifier,arg.required,arg.helpMessage);      
         }
         return helpMessage;
     }
