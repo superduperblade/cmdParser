@@ -16,7 +16,7 @@
 *.vspx
 *.ncb
 *.opendb
-
+*.sln
 
 .vs/
 *.vcxproj.user
