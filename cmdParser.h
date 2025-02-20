@@ -50,7 +50,6 @@ public:
 
 
             for (argument arg: arguments){
-                std::cout << arg.identifier << '\n';
                 if(arg.identifier == u_arg ){
                     if (arg.subtype){
                         if( i +1 != numberOfArgs ){
@@ -66,6 +65,7 @@ public:
                     }else{
                         //just puts the identifier itself
                         userArgument_values[arg.identifier] = argv[i];
+                        was_found = true;
                     }
                 }
 
@@ -96,7 +96,7 @@ public:
     }
 
     void error(){
-        cerr << this->displayHelpMessage();
+        cerr << this->getHelpMessage();
         if(exit){
             cout << "Exiting \n";
             exit(-1);
@@ -105,20 +105,26 @@ public:
 
     void error(string message){
         cerr <<"Encountered error: "<< message << '\n';
-        cerr << this->displayHelpMessage();
+        cerr << this->getHelpMessage();
         if(exit){
             cout << "Exiting \n";
             exit(-1);
         }
     }
 
+    
+
 //displays the contents of the arguments passed into this libary 
-    string displayHelpMessage(){
+    string getHelpMessage(){
         string helpMessage = "This program uses the following command line arguments: \n";
         for (argument arg : arguments){
             helpMessage += std::format("Identifier: {} , Required: {}, Help: {} \n",arg.identifier,arg.required,arg.helpMessage);      
         }
         return helpMessage;
+    }
+
+    void displayHelpMessage() {
+        cout << getHelpMessage();
     }
 
     int getNumberOfRequiredArguments(){
@@ -127,6 +133,15 @@ public:
             if(arg.required) counter++;
         }
         return counter;
+    }
+
+    bool doesArgExist(string identifier) {
+        for (argument arg : arguments) {
+            if (arg.identifier == identifier) {
+                return true;
+            }
+        }
+        return false;
     }
 
 };
