@@ -1,3 +1,4 @@
+#pragma once
 #include <map>
 #include <string>
 #include <any>
@@ -6,7 +7,7 @@
 #include <format>
 using namespace std;
 
-class cmdParser
+class CmdParser
 {
     struct argument{
         string identifier = "";
@@ -27,8 +28,11 @@ private:
     char* argv[];
 public:
 
-    cmdParser(bool exit_If_Failed){
+    CmdParser(bool exit_If_Failed){
         this->exit_On_Fail = exit_If_Failed;
+    }
+    CmdParser() {
+        this->exit_On_Fail = true; //defualt
     }
 
 
@@ -44,12 +48,12 @@ public:
         if (getNumberOfRequiredArguments() > 0 && numberOfArgs == 1) {
             error("None of the the required args where put!");
         }
+
         
         //starts at 1 instead of position 0 as the first argument is the executable
         for(int i = 1; i < numberOfArgs;i++){
             string u_arg = argv[i];
             bool was_found = false;
-
 
             for (argument arg: arguments){
                 if(arg.identifier == u_arg ){
@@ -99,8 +103,8 @@ public:
 
     void error(){
         cerr << this->getHelpMessage();
-        if(exit){
-            cout << "Exiting \n";
+        if(exit_On_Fail){
+            cout << "Exiting... \n";
             exit(-1);
         }
     }
@@ -108,8 +112,8 @@ public:
     void error(string message){
         cerr <<"Encountered error: "<< message << '\n';
         cerr << this->getHelpMessage();
-        if(exit){
-            cout << "Exiting \n";
+        if(exit_On_Fail){
+            cout << "Exiting... \n";
             exit(-1);
         }
     }
@@ -138,12 +142,7 @@ public:
     }
 
     bool doesArgExist(string identifier) {
-        for (argument arg : arguments) {
-            if (arg.identifier == identifier) {
-                return true;
-            }
-        }
-        return false;
+        return userArgument_values[identifier] != "";
     }
 
 };
