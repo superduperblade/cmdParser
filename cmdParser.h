@@ -92,11 +92,13 @@ public:
                 }
 
             }
-
+           
             if (!was_found) {
                 error("No argument was found for: " + u_arg);
             }
+            
         }
+        giveArgDefualts();
         return false;
     }
 
@@ -109,7 +111,16 @@ public:
     void addOption(string identifier, string helpMessage) {
         arguments.push_back(argument(identifier, helpMessage));
     }
-
+    void addOption(string identifier, string helpMessage, IS_REQUIRED required, IS_SUBTYPE subtype, string defualtString) {
+        arguments.push_back(argument(identifier, helpMessage, required, subtype, defualtString));
+    }
+    void addOption(string identifier, string helpMessage, IS_REQUIRED required, string defualtString) {
+        arguments.push_back(argument(identifier, helpMessage, required, defualtString));
+    }
+    void addOption(string identifier, string helpMessage, string defualtString) {
+        arguments.push_back(argument(identifier, helpMessage, defualtString));
+    }
+  
     string getArgument(std::string identifier) {
         return userArgument_values[identifier];
     }
@@ -136,12 +147,13 @@ public:
     //Only use this if userarguments have been inputed to the class
     void giveArgDefualts() {
         for (argument arg : arguments) {
-              if (userArgument_values.count(arg.identifier)) {
-                  if (arg.defaultValue != "") {
-                      if (userArgument_values[arg.identifier] == "") {
+     
+              if (!userArgument_values.count(arg.identifier)) {
+                  
+              if (arg.defaultValue != "") {
                           userArgument_values[arg.identifier] = arg.defaultValue;
-                     }
-                  }
+              }
+                  
              }
             
         }
